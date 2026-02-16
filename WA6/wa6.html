@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="wa6.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>Design System Template</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend+Deca:wght@100..900&family=Playwrite+CU+Guides&family=Red+Hat+Display:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1>Design System Template</h1>
+
+        <section>
+            <h2>Color Palette</h2>
+            <div class="color-palette">
+                <div class="color-swatch" style="background-color: var(--color-primary); color: var(--color-text-light);">
+                    <strong>Primary Color</strong>
+                    <p>#C33149</p>
+                    <small>Contrast Ratio: 4.31:1</small>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-secondary); color: var(--color-text-light);">
+                    <strong>Secondary Color</strong>
+                    <p>#627523</p>
+                    <small>Contrast Ratio: 4.07:1</small>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-accent); color: var(--color-text-light);">
+                    <strong>Accent Color</strong>
+                    <p>#e74c3c</p>
+                    <small>Contrast Ratio: 5.89:1</small>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-neutral); color: var(--color-text-light);">
+                    <strong>Neutral Color</strong>
+                    <p>#34495e</p>
+                    <small>Contrast Ratio: 5.93:1</small>
+                </div>
+                <div class="color-swatch" style="background-color: var(--color-highlight); color: var(--color-text-dark);">
+                    <strong>Highlight Color</strong>
+                    <p>#f1c40f</p>
+                    <small>Contrast Ratio: 1.08:1</small>
+                </div>
+            </div>
+        </section>
+
+        <section>
+            <h2>Typography</h2>
+            <h1>Heading 1 - Lexend Deca</h1>
+            <h2>Heading 2 - Lexend Deca</h2>
+            <h3>Heading 3 - Lexend Deca</h3>
+            <p class="body-text">Body Text - Using Space Grotesk with a comfortable line height and readable size.</p>
+            <p class="small-text">Small Text - Subtle and understated, perfect for annotations and footnotes.</p>
+        </section>
+
+        <section>
+            <h2>Spacing System</h2>
+            <div class="spacing-demo">
+                <div class="spacing-block" style="width: var(--spacing-xs)"></div>
+                <div class="spacing-block" style="width: var(--spacing-sm)"></div>
+                <div class="spacing-block" style="width: var(--spacing-md)"></div>
+                <div class="spacing-block" style="width: var(--spacing-lg)"></div>
+                <div class="spacing-block" style="width: var(--spacing-xl)"></div>
+            </div>
+            <p>Spacing blocks demonstrating size variations from xs to xl</p>
+        </section>
+
+        <section>
+            <h2>Interactive Components</h2>
+            <a href="#" class="button">Primary Button</a>
+            <a href="#" class="link">Standard Link</a>
+            <a href="#" class="link" style="color: rgb(64, 54, 12);">Visited Link</a>
+        </section>
+    </div>
+</body>
+</html>

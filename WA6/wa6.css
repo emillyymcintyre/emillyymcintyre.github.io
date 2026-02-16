@@ -1,0 +1,154 @@
+/* CSS Reset and Base Styles */
+        :root {
+            /* Color Palette - 5 Core Colors */
+            --color-primary: #c33149;     /*Intense Cherry - Main Brand Color */
+            --color-secondary: #627523;   /* Yellow Green - Complementary Action Color */
+            --color-accent: #A22522;      /* WHEAT - Highlight / Warning Color */
+            --color-neutral: #864214;     /* CAMEL - Neutral Text and Background */
+            --color-highlight: #F3D9B1;   /* BROWN RED- Accent / Attention Color */
+            
+            /* Derived Colors for Flexibility */
+            --color-background: color-mix(in srgb, var(--color-neutral) 15%, white);
+            --color-text-dark: var(--color-neutral);
+            --color-text-light: white;
+
+            /* Typography */
+            --font-primary: 'Lexend Deca', -apple-system, BlinkMacSystemFont, sans-serif;
+            --font-secondary: "Red Hat Display",-apple-system, BlinkMacSystemFont, sans-serif;
+
+            /* Spacing System */
+            --spacing-xs: 0.32rem;
+            --spacing-sm: 0.64rem;
+            --spacing-md: 1.28rem;
+            --spacing-lg: 1.92rem;
+            --spacing-xl: 2.56rem;
+
+            /* Border Radius */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            line-height: 1.6;
+            background-color: var(--color-background);
+            color: var(--color-text-dark);
+            padding: var(--spacing-xl);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Typography Styles */
+        h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            color: var(--color-primary);
+        }
+
+        h2 {
+            font-size: 2.3rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+            color: var(--color-secondary);
+        }
+
+        h3 {
+            
+            font-size: 1.8rem;
+            font-weight: 500;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-accent);
+        }
+       
+
+        .body-text {
+            font-size: 1.2rem;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .small-text {
+            font-size: 0.75rem;
+            color: color-mix(in srgb, var(--color-text-dark) 70%, transparent);
+        }
+
+        /* Color Palette Section */
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .color-swatch {
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        /* Component Styles */
+        .button {
+            display: inline-block;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background-color: var(--color-primary);
+            color: var(--color-text-light);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            transition: background-color 0.3s ease, transform 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .button:hover {
+            background-color: color-mix(in srgb, var(--color-primary) 80%, rgb(255, 255, 255));
+            border-color: var(--color-accent);
+            color: var(--color-text-light);
+            transform: scale(1.05);
+        }
+
+        .button:active {
+            transform: scale(0.95);
+            background-color: var(--color-secondary);
+        }
+
+        .link {
+            color: var(--color-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease, text-decoration-color 0.3s;
+        }
+
+        .link:hover {
+            color: var(--color-accent);
+            text-decoration: underline;
+            text-decoration-color: var(--color-highlight);
+        }
+
+        .link:visited {
+            color: var(--color-neutral);
+        }
+
+        /* Spacing Demonstration */
+        .spacing-demo {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .spacing-block {
+            background-color: var(--color-primary);
+            height: 50px;
+        }
