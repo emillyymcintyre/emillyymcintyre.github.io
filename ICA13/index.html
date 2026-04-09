@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Bouncing balls</title>
+    <style>
+      body { margin: 0; overflow: hidden; background: black; }
+      h1 { position: absolute; color: white; padding: 10px; }
+    </style>
+  </head>
+
+  <body>
+    <h1>bouncing balls</h1>
+    <canvas></canvas>
+
+    <script>
+      const canvas = document.querySelector("canvas");
+      const ctx = canvas.getContext("2d");
+
+      const width = (canvas.width = window.innerWidth);
+      const height = (canvas.height = window.innerHeight);
+
+      function random(min, max) {
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function randomRGB() {
+        return `rgb(${random(0, 255)} ${random(0, 255)} ${random(0, 255)})`;
+      }
+
+      class Ball {
+        constructor(x, y, velX, velY, color, size) {
+          this.x = x;
+          this.y = y;
+          this.velX = velX;
+          this.velY = velY;
+          this.color = color;
+          this.size = size;
+        }
+
+        draw() {
+          ctx.beginPath();
+          ctx.fillStyle = this.color;
+          ctx.arc(this.x, this.y, this.size, 0, 2 * Math.PI);
+          ctx.fill();
+        }
+
+        update() {
+          if (this.x + this.size >= width)  this.velX = -Math.abs(this.velX);
+          if (this.x - this.size <= 0)      this.velX =  Math.abs(this.velX);
+          if (this.y + this.size >= height) this.velY = -Math.abs(this.velY);
+          if (this.y - this.size <= 0)      this.velY =  Math.abs(this.velY);
+
+          this.x += this.velX;
+          this.y += this.velY;
+        }
+
+        collisionDetect() {
+          for (const other of balls) {
+            if (this === other) continue;
+
+            const dx = other.x - this.x;
+            const dy = other.y - this.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const minDist = this.size + other.size;
+
+            if (distance < minDist && distance > 0) {
+              // --- Separate overlapping balls ---
+              const overlap = (minDist - distance) / 2;
+              const nx = dx / distance; // collision normal x
+              const ny = dy / distance; // collision normal y
+
+              this.x  -= nx * overlap;
+              this.y  -= ny * overlap;
+              other.x += nx * overlap;
+              other.y += ny * overlap;
+
+              // --- Reflect velocities along the collision normal ---
+              // Project each velocity onto the normal
+              const thisDot  = this.velX  * nx + this.velY  * ny;
+              const otherDot = other.velX * nx + other.velY * ny;
+
+              // Swap the normal components (equal-mass elastic collision)
+              this.velX  += (otherDot - thisDot) * nx;
+              this.velY  += (otherDot - thisDot) * ny;
+              other.velX += (thisDot - otherDot) * nx;
+              other.velY += (thisDot - otherDot) * ny;
+
+              // Optional: change color on bounce
+              other.color = this.color = randomRGB();
+            }
+          }
+        }
+      }
+
+      const balls = [];
+
+      while (balls.length < 25) {
+        const size = random(10, 20);
+        const ball = new Ball(
+          random(size, width - size),
+          random(size, height - size),
+          random(-7, 7) || 1,
+          random(-7, 7) || 1,
+          randomRGB(),
+          size,
+        );
+        balls.push(ball);
+      }
+
+      function loop() {
+        ctx.fillStyle = "rgb(0 0 0 / 25%)";
+        ctx.fillRect(0, 0, width, height);
+
+        for (const ball of balls) {
+          ball.draw();
+          ball.update();
+          ball.collisionDetect();
+        }
+
+        requestAnimationFrame(loop);
+      }
+
+      loop();
+    </script>
+  </body>
+</html>
