@@ -1,0 +1,23 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center;     /* vertical center */
+  flex-direction: column;
+  
+  background: rgb(24, 22, 29);
+}
+
+canvas {
+  border: 10px solid rgb(118, 185, 187);
+    background: #f0f0f0;
+}
+
+html, body {
+  overflow: hidden;
+}
+
+h2{
+    color: #f0f0f0;
+}
