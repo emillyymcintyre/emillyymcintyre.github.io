@@ -6,6 +6,35 @@ const scoreEl = document.getElementById("score");
 let score = 0;
 
 
+const greenHex = new Image();
+greenHex.src = "GreenHex.png"; // make sure this path is correct
+const redHex = new Image();
+redHex.src = "RedHex.png";
+
+function drawGrid() {
+  const gridSize = 50; 
+
+  ctx.strokeStyle = "#42663a"; // dark gray lines
+  ctx.lineWidth = 1;
+
+  // vertical lines
+  for (let x = 0; x <= canvas.width; x += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, canvas.height);
+    ctx.stroke();
+  }
+
+  // horizontal lines
+  for (let y = 0; y <= canvas.height; y += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(canvas.width, y);
+    ctx.stroke();
+  }
+}
+
+
 class Ball{
     constructor(x, y, dx, dy, radius, value){
         this.x = x;
@@ -17,18 +46,36 @@ class Ball{
     }
 
     draw(){
-        ctx.beginPath()
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    const img = this.value >= 0 ? greenHex : redHex;
 
-        ctx.fillStyle = this.value >= 0 ? "green" : "red";
-        ctx.fill();
-        ctx.closePath();
+    const height = this.radius * 2;
+    const width = height * (img.naturalWidth / img.naturalHeight);
 
-        ctx.fillStyle = "white";
-        ctx.font = "14px Arial";
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillText(this.value, this.x, this.y)
+    ctx.drawImage(
+        img,
+        this.x - width / 2,
+        this.y - height / 2,
+        width,
+        height
+    );
+
+    // shadow settings
+    ctx.shadowColor = "black";
+    ctx.shadowBlur = 5;
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+
+    // text
+    ctx.fillStyle = "white";
+    ctx.font = "14px Futura";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText(this.value, this.x, this.y);
+
+    //  reset shadow so it doesn't affect other drawings
+    ctx.shadowBlur = 0;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
     }
 
     update() {
@@ -42,8 +89,10 @@ class Ball{
 let balls = [];
 
 function animate() {
-    console.log("bawl spawn");
+    
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  drawGrid();
 
   for (let i = balls.length - 1; i >= 0; i--) {
   let ball = balls[i];
@@ -64,12 +113,12 @@ function animate() {
 }
 
 function spawnBall(){
-    console.log("bawl spawn");
+   
     const y = Math.random() * (canvas.height - 30) + 30;
     const speed = Math.random() * 1 + .7;
-    const num = Math.floor(Math.random() * 41 ) -20;
+    const num = Math.floor(Math.random() * 31 ) -15;
 
-    balls.push(new Ball(0, y, speed, 0, 15, num));
+    balls.push(new Ball(0, y, speed, 0, 30, num));
 }
 
 canvas.addEventListener("click", (event)=> {
@@ -77,34 +126,39 @@ canvas.addEventListener("click", (event)=> {
     const mouseX = event.clientX - rect.left;
     const mouseY = event.clientY - rect.top;
 
-    balls.forEach((ball, index) => {
-        const dx = mouseX - ball.x;
-        const dy = mouseY - ball.y;
+    for (let i = balls.length - 1; i >= 0; i--) {
+    let ball = balls[i];
 
-        const distance = Math.sqrt(dx * dx + dy * dy);
+    const dx = mouseX - ball.x;
+    const dy = mouseY - ball.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
 
-        if(distance < ball.radius){
-            score += ball.value;
-            if(score > 100){
-                score = 100;
-            }
-            else if(score < 0){
-                score = 0;
-            }
-            scoreEl.textContent = "Score: " + score;
-            balls.splice(index, 1);
-
-            
-        }
-
-    })
+    if (distance < ball.radius) {
+        score += ball.value;
+        score = Math.max(0, Math.min(100, score));
+        scoreEl.textContent = "Score: " + score;
+        balls.splice(i, 1);
+    }
+}
 
 
 
 })
 
-animate();
+let imagesLoaded = 0;
 
-setTimeout(() => {
-  setInterval(spawnBall, 1000);
-}, 300);
+function checkLoaded() {
+  imagesLoaded++;
+  if (imagesLoaded === 2) {
+    animate(); 
+    
+    setTimeout(() => {
+      setInterval(spawnBall, 1900);
+    }, 1000);
+    
+  }
+}
+
+greenHex.onload = checkLoaded;
+redHex.onload = checkLoaded;
+
