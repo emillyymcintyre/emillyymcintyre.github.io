@@ -137,7 +137,7 @@ function animate() {
     if (!ball.isExploding && ball.value !== 0) {
         score += ball.value;
         score = Math.max(0, Math.min(100, score));
-        scoreEl.textContent = "Score: " + score;
+        scoreEl.textContent = "Volume: " + score;
     }
 
     balls.splice(i, 1);
@@ -152,7 +152,7 @@ function spawnBall(){
    
     const y = Math.random() * (canvas.height - 30) + 30;
     const speed = Math.random() * 1 + 1.4;
-    
+
     const num = Math.floor(Math.random() * 11 ) -5;
 
     balls.push(new Ball(0, y, speed, 0, 30, num));
@@ -175,7 +175,7 @@ canvas.addEventListener("click", (event)=> {
             score = 0;
             bombSound.currentTime = 0;
             bombSound.play();
-            scoreEl.textContent = "Score: " + score;
+            scoreEl.textContent = "Volume: " + score;
 
             ball.isExploding = true;
             ball.dx = 0;
