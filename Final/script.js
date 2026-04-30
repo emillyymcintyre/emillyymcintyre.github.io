@@ -151,7 +151,8 @@ function animate() {
 function spawnBall(){
    
     const y = Math.random() * (canvas.height - 30) + 30;
-    const speed = Math.random() * 1 + 1.7;
+    const speed = Math.random() * 1 + 1.4;
+    
     const num = Math.floor(Math.random() * 11 ) -5;
 
     balls.push(new Ball(0, y, speed, 0, 30, num));
