@@ -5,15 +5,21 @@ const ctx = canvas.getContext("2d");
 const scoreEl = document.getElementById("score");
 let score = 0;
 
-
+// images
 const greenHex = new Image();
-greenHex.src = "GreenHex.png"; // make sure this path is correct
+greenHex.src = "GreenHex.png"; 
 const redHex = new Image();
 redHex.src = "RedHex.png";
 const bombImg = new Image();
 bombImg.src = "bomb.png";
 const explosion = new Image();
 explosion.src = "explosion.png";
+
+//sounds
+const scoreUpSound = new Audio("score_up.mp3");
+const scoreDownSound = new Audio("score_down.mp3");
+const popSound = new Audio("hex_pop.mp3");
+const bombSound = new Audio("bomb_sound.mp3");
 
 function drawGrid() {
   const gridSize = 50; 
@@ -111,14 +117,31 @@ function animate() {
   let ball = balls[i];
   ball.update();
 
-  if (
-    ball.x > canvas.width ||
-    ball.x < 0 ||
-    ball.y > canvas.height ||
-    ball.y < 0
-  ) {
+
+
+  if (ball.x > canvas.width) {
+    if(ball.value > 0){
+        scoreUpSound.currentTime = 0;
+        scoreUpSound.play();
+    }
+    if(ball.value < 0){
+        scoreDownSound.currentTime = 0;
+        scoreDownSound.play();
+    }
+    
+
+    ctx.fillStyle = "rgba(255,255,255,0.2)";
+    ctx.fillRect(canvas.width - 10, 0, 10, canvas.height);
+
+
+    if (!ball.isExploding && ball.value !== 0) {
+        score += ball.value;
+        score = Math.max(0, Math.min(100, score));
+        scoreEl.textContent = "Score: " + score;
+    }
+
     balls.splice(i, 1);
-  }
+}
 }
     
 
@@ -128,7 +151,7 @@ function animate() {
 function spawnBall(){
    
     const y = Math.random() * (canvas.height - 30) + 30;
-    const speed = Math.random() * 1 + .7;
+    const speed = Math.random() * 1 + 1.7;
     const num = Math.floor(Math.random() * 11 ) -5;
 
     balls.push(new Ball(0, y, speed, 0, 30, num));
@@ -148,28 +171,30 @@ canvas.addEventListener("click", (event)=> {
 
     if (distance < ball.radius) {
         if (ball.value === 0) {
-        score = 0;
-        scoreEl.textContent = "Score: " + score;
+            score = 0;
+            bombSound.currentTime = 0;
+            bombSound.play();
+            scoreEl.textContent = "Score: " + score;
 
-        ball.isExploding = true;
-        ball.dx = 0;
-        ball.dy = 0;
+            ball.isExploding = true;
+            ball.dx = 0;
+            ball.dy = 0;
 
-        setTimeout(() => {
-            const index = balls.indexOf(ball);
-            if (index !== -1) {
-                balls.splice(index, 1);
+            setTimeout(() => {
+                const index = balls.indexOf(ball);
+                if (index !== -1) {
+                    balls.splice(index, 1);
+                }
+            }, 800);
+
+            } else {
+                
+                popSound.currentTime = 0;
+                popSound.play();
+    
+                balls.splice(i, 1);
             }
-        }, 800);
-
-    } else {
-        score += ball.value;
-        score = Math.max(0, Math.min(100, score));
-        scoreEl.textContent = "Score: " + score;
-
-        balls.splice(i, 1);
-    }
-    }
+            }
 }
 
 
@@ -184,7 +209,7 @@ function checkLoaded() {
     animate(); 
     
     setTimeout(() => {
-      setInterval(spawnBall, 1900);
+      setInterval(spawnBall, 900);
     }, 1000);
     
   }
