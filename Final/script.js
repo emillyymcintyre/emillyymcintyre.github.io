@@ -10,11 +10,15 @@ const greenHex = new Image();
 greenHex.src = "GreenHex.png"; // make sure this path is correct
 const redHex = new Image();
 redHex.src = "RedHex.png";
+const bombImg = new Image();
+bombImg.src = "bomb.png";
+const explosion = new Image();
+explosion.src = "explosion.png";
 
 function drawGrid() {
   const gridSize = 50; 
 
-  ctx.strokeStyle = "#42663a"; // dark gray lines
+  ctx.strokeStyle = "#42663a"; // dark green lines
   ctx.lineWidth = 1;
 
   // vertical lines
@@ -43,10 +47,20 @@ class Ball{
         this.dy = dy;
         this.radius = radius;
         this.value = value;
+        this.bomb = false;
     }
 
     draw(){
-    const img = this.value >= 0 ? greenHex : redHex;
+    let img;
+
+    if (this.isExploding) {
+        img = explosion;
+    } else if (this.value === 0) {
+        img = bombImg;
+    } else {
+        img = this.value >= 0 ? greenHex : redHex;
+    }
+
 
     const height = this.radius * 2;
     const width = height * (img.naturalWidth / img.naturalHeight);
@@ -59,23 +73,22 @@ class Ball{
         height
     );
 
-    // shadow settings
+    if (!this.isExploding) {
     ctx.shadowColor = "black";
     ctx.shadowBlur = 5;
     ctx.shadowOffsetX = 2;
     ctx.shadowOffsetY = 2;
 
-    // text
     ctx.fillStyle = "white";
     ctx.font = "14px Futura";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(this.value, this.x, this.y);
 
-    //  reset shadow so it doesn't affect other drawings
     ctx.shadowBlur = 0;
     ctx.shadowOffsetX = 0;
     ctx.shadowOffsetY = 0;
+}
     }
 
     update() {
@@ -116,7 +129,7 @@ function spawnBall(){
    
     const y = Math.random() * (canvas.height - 30) + 30;
     const speed = Math.random() * 1 + .7;
-    const num = Math.floor(Math.random() * 31 ) -15;
+    const num = Math.floor(Math.random() * 11 ) -5;
 
     balls.push(new Ball(0, y, speed, 0, 30, num));
 }
@@ -134,10 +147,28 @@ canvas.addEventListener("click", (event)=> {
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance < ball.radius) {
+        if (ball.value === 0) {
+        score = 0;
+        scoreEl.textContent = "Score: " + score;
+
+        ball.isExploding = true;
+        ball.dx = 0;
+        ball.dy = 0;
+
+        setTimeout(() => {
+            const index = balls.indexOf(ball);
+            if (index !== -1) {
+                balls.splice(index, 1);
+            }
+        }, 800);
+
+    } else {
         score += ball.value;
         score = Math.max(0, Math.min(100, score));
         scoreEl.textContent = "Score: " + score;
+
         balls.splice(i, 1);
+    }
     }
 }
 
@@ -149,7 +180,7 @@ let imagesLoaded = 0;
 
 function checkLoaded() {
   imagesLoaded++;
-  if (imagesLoaded === 2) {
+  if (imagesLoaded === 4) {
     animate(); 
     
     setTimeout(() => {
@@ -161,4 +192,6 @@ function checkLoaded() {
 
 greenHex.onload = checkLoaded;
 redHex.onload = checkLoaded;
+bombImg.onload = checkLoaded;
+explosion.onload = checkLoaded;
 
